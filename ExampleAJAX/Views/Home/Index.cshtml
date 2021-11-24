@@ -1,0 +1,30 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<h3>Выберите страну</h3>
+@Html.DropDownList("Country", ViewBag.Countries as SelectList, new { id = "country" })
+<h3>Выберите город</h3>
+@Html.DropDownList("City", ViewBag.Cities as SelectList, new { id = "city" })
+
+@section scripts{
+    <script type="text/javascript">
+    $(function () {
+
+        $('#country').change(function()
+        {
+            // получаем выбранный id
+            var id = $(this).val();
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetItems")/' + id,
+                success: function (data) {
+
+                    // заменяем содержимое присланным частичным представлением
+                    $('#city').replaceWith(data);
+                }
+            });
+        });
+    })
+    </script>
+}
